@@ -1,0 +1,7 @@
+CREATE TABLE boards (
+	id INTEGER NOT NULL AUTO_INCREMENT,
+	title VARCHAR(255),
+	contents VARCHAR(255),
+	
+	PRIMARY KEY (id)
+);
