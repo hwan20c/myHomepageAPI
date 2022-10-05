@@ -12,7 +12,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name = "boards")
-public class board {
+public class Board {
     public static final String SINGULAR = "board";
     public static final String MULTIPLE = "boards";
 
