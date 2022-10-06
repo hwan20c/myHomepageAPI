@@ -1,4 +1,4 @@
-package com.tb.api.tbapiserver.board.cotroller;
+package com.tb.api.tbapiserver.board.controller;
 
 import java.util.Optional;
 
@@ -28,12 +28,12 @@ public class BoardController {
 		this.boardService = boardService;
 	}
 	
-	@GetMapping("/board")
-	public ResponseEntity<Page<Board>> list(
-		@RequestParam(value = "name", required = false, defaultValue = "") Optional<String> name,
-		@RequestParam(value = "search", required = false, defaultValue = "") Optional<String> search,
-		@RequestParam(value = "page", required = false, defaultValue = "0") Optional<Integer> page,
-		@RequestParam(value = "size", required = false, defaultValue = "9") Optional<Integer> size) {
+	// @GetMapping("/board")
+	// public ResponseEntity<Page<Board>> list(
+	// 	@RequestParam(value = "name", required = false, defaultValue = "") Optional<String> name,
+	// 	@RequestParam(value = "search", required = false, defaultValue = "") Optional<String> search,
+	// 	@RequestParam(value = "page", required = false, defaultValue = "0") Optional<Integer> page,
+	// 	@RequestParam(value = "size", required = false, defaultValue = "9") Optional<Integer> size) {
 
-	}
+	// }
 }
