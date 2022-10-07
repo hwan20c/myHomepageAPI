@@ -18,6 +18,9 @@ dependencies {
 	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+	compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
 	compileOnly("org.springframework.boot:spring-boot-devtools")
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
