@@ -22,8 +22,10 @@ public class BoardService {
 		return boardRepository.save(board);
 	}
 
-	// public Page<Board> BoardSearch(Optional<String> name, Optional<String> search, Optional<Integer> page, Optional<Integer> size) {
-	// 		Pageable pageable = PageRequest.of(page.orElse(0), size.orElse(9));
-	// 		Page<Board> boardlist = 
-	// }
+	public Page<Board> BoardSearch(Optional<String> title, Optional<String> contents, Optional<Integer> page, Optional<Integer> size) {
+		Pageable pageable = PageRequest.of(page.orElse(0), size.orElse(9));
+		Page<Board> boardlist = boardRepository.findByBoardSearch(title.orElse(""), contents.orElse(""), pageable);
+
+		return boardlist;
+	}
 }

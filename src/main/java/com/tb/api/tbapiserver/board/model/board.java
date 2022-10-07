@@ -11,7 +11,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
-@Table(name = "boards")
+@Table(name = "")
 public class Board {
     public static final String SINGULAR = "board";
     public static final String MULTIPLE = "boards";
