@@ -1,16 +1,20 @@
 package com.tb.api.tbapiserver.board.service;
 
-import java.util.Optional;
-
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.tb.api.tbapiserver.board.model.Board;
 import com.tb.api.tbapiserver.board.repository.BoardRepository;
+import com.tb.api.tbapiserver.board.search.BoaredSearchRequest;
+import com.tb.api.tbapiserver.specification.BoardSpecification;
 
 @Service
+@ComponentScan(value = "BoardSpecification")
 public class BoardService {
 	private final BoardRepository boardRepository;
 
@@ -22,10 +26,18 @@ public class BoardService {
 		return boardRepository.save(board);
 	}
 
-	public Page<Board> BoardSearch(Optional<String> title, Optional<String> contents, Optional<Integer> page, Optional<Integer> size) {
-		Pageable pageable = PageRequest.of(page.orElse(0), size.orElse(9));
-		Page<Board> boardlist = boardRepository.findByBoardSearch(title.orElse(""), contents.orElse(""), pageable);
-
-		return boardlist;
+	public Page<Board> listAll(BoaredSearchRequest boaredSearchRequest) {
+		Pageable pageable = PageRequest.of(boaredSearchRequest.getPage(), boaredSearchRequest.getSize(), Sort.by("id").descending());
+		if (boaredSearchRequest.getSearchKey().isEmpty()) {
+			return boardRepository.findAll(Specification
+			.where(BoardSpecification.searchType(boaredSearchRequest.getType()))
+			.and(BoardSpecification.searchTitle(boaredSearchRequest.getSearchValue()))
+				.or(BoardSpecification.searchContent(boaredSearchRequest.getSearchValue())), pageable);
+		} else {
+			return boardRepository.findAll(Specification
+			.where(BoardSpecification.searchType(boaredSearchRequest.getType()))
+			.and(BoardSpecification.searchLike(boaredSearchRequest)), pageable);
+		}
 	}
+
 }
