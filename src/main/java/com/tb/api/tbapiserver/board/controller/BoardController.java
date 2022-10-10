@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tb.api.tbapiserver.board.model.Board;
-import com.tb.api.tbapiserver.board.search.BoaredSearchRequest;
+import com.tb.api.tbapiserver.board.search.BoardSearchRequest;
 import com.tb.api.tbapiserver.board.service.BoardService;
 import com.tb.api.tbapiserver.constants.Constants;
 
@@ -25,7 +25,8 @@ public class BoardController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<Page<Board>> list(HttpServletRequest request, BoaredSearchRequest boaredSearchRequest) {
+	public ResponseEntity<Page<Board>> list(HttpServletRequest request, BoardSearchRequest boaredSearchRequest) {
+		System.out.println("@@@@@@@@@" + org.hibernate.Version.getVersionString());
 		Page<Board> boardList = boardService.listAll(boaredSearchRequest);
 		return new ResponseEntity<>(boardList, HttpStatus.OK);
 	}

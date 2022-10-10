@@ -14,7 +14,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "")
+@Table(name = "boards")
 public class Board {
     public static final String SINGULAR = "board";
     public static final String MULTIPLE = "boards";
@@ -28,8 +28,14 @@ public class Board {
     @Column(columnDefinition = "longtext", nullable = false)
     private String contents;
 
-    @Column(length = 50, nullable = false)
-    private String author;
+    @Column(name = "image_path")
+    private String imagePath;
+
+    @Column(name = "view_count")
+    private String viewCount;
+
+    @Column(name = "type")
+    private int type;
 
     @CreationTimestamp
     @Column(name = "created_at")
@@ -38,10 +44,4 @@ public class Board {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private Timestamp updatedAt;
-
-    @Column(name = "view_count")
-    private int viewCount;
-
-    @Column(name = "image_path")
-    private String image_path;
 }

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.tb.api.tbapiserver.board.model.Board;
 import com.tb.api.tbapiserver.board.repository.BoardRepository;
-import com.tb.api.tbapiserver.board.search.BoaredSearchRequest;
+import com.tb.api.tbapiserver.board.search.BoardSearchRequest;
 import com.tb.api.tbapiserver.specification.BoardSpecification;
 
 @Service
@@ -26,9 +26,13 @@ public class BoardService {
 		return boardRepository.save(board);
 	}
 
-	public Page<Board> listAll(BoaredSearchRequest boaredSearchRequest) {
+	public Page<Board> listAll(BoardSearchRequest boaredSearchRequest) {
 		Pageable pageable = PageRequest.of(boaredSearchRequest.getPage(), boaredSearchRequest.getSize(), Sort.by("id").descending());
-		if (boaredSearchRequest.getSearchKey().isEmpty()) {
+		// boaredSearchRequest.setType(3);
+		if (boaredSearchRequest.getSearchKey() == null) {
+			// return boardRepository.findByType(String.valueOf(boaredSearchRequest.getType()), pageable);
+			return boardRepository.findByType(boaredSearchRequest.getType(), pageable);
+		} else if (boaredSearchRequest.getSearchKey().isEmpty()) {
 			return boardRepository.findAll(Specification
 			.where(BoardSpecification.searchType(boaredSearchRequest.getType()))
 			.and(BoardSpecification.searchTitle(boaredSearchRequest.getSearchValue()))

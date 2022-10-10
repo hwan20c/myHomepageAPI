@@ -3,7 +3,7 @@ package com.tb.api.tbapiserver.specification;
 import org.springframework.data.jpa.domain.Specification;
 
 import com.tb.api.tbapiserver.board.model.Board;
-import com.tb.api.tbapiserver.board.search.BoaredSearchRequest;
+import com.tb.api.tbapiserver.board.search.BoardSearchRequest;
 
 public class BoardSpecification {
 
@@ -11,7 +11,7 @@ public class BoardSpecification {
         throw new IllegalStateException("Utility : Specification Class");
     }
 
-    public static Specification<Board> searchLike(BoaredSearchRequest boaredSearchRequest) {
+    public static Specification<Board> searchLike(BoardSearchRequest boaredSearchRequest) {
         return (root, query, criteriaBuilder) ->
             criteriaBuilder.like(root.get(boaredSearchRequest.getSearchKey()), "%" + boaredSearchRequest.getSearchValue() + "%");
     }

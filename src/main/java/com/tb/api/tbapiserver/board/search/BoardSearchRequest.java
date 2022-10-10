@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class BoaredSearchRequest {
+public class BoardSearchRequest {
     private int page = 0;
     private int size = 9;
     private int type = 0;
