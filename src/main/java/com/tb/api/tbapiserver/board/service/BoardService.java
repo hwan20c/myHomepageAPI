@@ -28,9 +28,7 @@ public class BoardService {
 
 	public Page<Board> listAll(BoardSearchRequest boardSearchRequest) {
 		Pageable pageable = PageRequest.of(boardSearchRequest.getPage(), boardSearchRequest.getSize(), Sort.by("id").descending());
-		// boardSearchRequest.setType(3);
 		if (boardSearchRequest.getSearchKey() == null) {
-			// return boardRepository.findByType(String.valueOf(boardSearchRequest.getType()), pageable);
 			return boardRepository.findByType(boardSearchRequest.getType(), pageable);
 		} else if (boardSearchRequest.getSearchKey().isEmpty()) {
 			return boardRepository.findAll(Specification

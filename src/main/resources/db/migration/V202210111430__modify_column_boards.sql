@@ -1,0 +1,1 @@
+ALTER TABLE boards CHANGE contents content LONGTEXT NOT NULL;

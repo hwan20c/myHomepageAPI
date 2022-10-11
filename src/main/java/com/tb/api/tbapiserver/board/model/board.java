@@ -22,11 +22,11 @@ public class Board {
     @Id
     private int id;
 
-    @Column(length = 255, nullable = false)
+    @Column(name = "title", length = 255, nullable = false)
     private String title;
 
-    @Column(columnDefinition = "longtext", nullable = false)
-    private String contents;
+    @Column(name = "content", columnDefinition = "longtext", nullable = false)
+    private String content;
 
     @Column(name = "image_path")
     private String imagePath;
