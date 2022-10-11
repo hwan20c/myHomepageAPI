@@ -26,21 +26,21 @@ public class BoardService {
 		return boardRepository.save(board);
 	}
 
-	public Page<Board> listAll(BoardSearchRequest boaredSearchRequest) {
-		Pageable pageable = PageRequest.of(boaredSearchRequest.getPage(), boaredSearchRequest.getSize(), Sort.by("id").descending());
-		// boaredSearchRequest.setType(3);
-		if (boaredSearchRequest.getSearchKey() == null) {
-			// return boardRepository.findByType(String.valueOf(boaredSearchRequest.getType()), pageable);
-			return boardRepository.findByType(boaredSearchRequest.getType(), pageable);
-		} else if (boaredSearchRequest.getSearchKey().isEmpty()) {
+	public Page<Board> listAll(BoardSearchRequest boardSearchRequest) {
+		Pageable pageable = PageRequest.of(boardSearchRequest.getPage(), boardSearchRequest.getSize(), Sort.by("id").descending());
+		// boardSearchRequest.setType(3);
+		if (boardSearchRequest.getSearchKey() == null) {
+			// return boardRepository.findByType(String.valueOf(boardSearchRequest.getType()), pageable);
+			return boardRepository.findByType(boardSearchRequest.getType(), pageable);
+		} else if (boardSearchRequest.getSearchKey().isEmpty()) {
 			return boardRepository.findAll(Specification
-			.where(BoardSpecification.searchType(boaredSearchRequest.getType()))
-			.and(BoardSpecification.searchTitle(boaredSearchRequest.getSearchValue()))
-				.or(BoardSpecification.searchContent(boaredSearchRequest.getSearchValue())), pageable);
+			.where(BoardSpecification.searchType(boardSearchRequest.getType()))
+			.and(BoardSpecification.searchTitle(boardSearchRequest.getSearchValue()))
+				.or(BoardSpecification.searchContent(boardSearchRequest.getSearchValue())), pageable);
 		} else {
 			return boardRepository.findAll(Specification
-			.where(BoardSpecification.searchType(boaredSearchRequest.getType()))
-			.and(BoardSpecification.searchLike(boaredSearchRequest)), pageable);
+			.where(BoardSpecification.searchType(boardSearchRequest.getType()))
+			.and(BoardSpecification.searchLike(boardSearchRequest)), pageable);
 		}
 	}
 
