@@ -26,9 +26,15 @@ public class BoardService {
 		return boardRepository.save(board);
 	}
 
+	public Page<Board> listAll(Pageable pageable) {
+    return boardRepository.findAll(pageable);
+  }
+
+
 	public Page<Board> listAll(BoardSearchRequest boardSearchRequest) {
 		Pageable pageable = PageRequest.of(boardSearchRequest.getPage(), boardSearchRequest.getSize(), Sort.by("id").descending());
-		if (boardSearchRequest.getSearchKey() == null) {
+
+		if (boardSearchRequest.getSearchKey().equals("null")) {
 			return boardRepository.findByType(boardSearchRequest.getType(), pageable);
 		} else if (boardSearchRequest.getSearchKey().isEmpty()) {
 			return boardRepository.findAll(Specification

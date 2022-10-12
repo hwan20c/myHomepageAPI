@@ -10,6 +10,8 @@ import javax.persistence.Table;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.tb.api.tbapiserver.dto.BoardSaveRequestDto;
+
 import lombok.Data;
 
 @Data
@@ -32,9 +34,9 @@ public class Board {
     private String imagePath;
 
     @Column(name = "view_count")
-    private String viewCount;
+    private int viewCount;
 
-    @Column(name = "type")
+    @Column
     private int type;
 
     @CreationTimestamp
@@ -44,4 +46,14 @@ public class Board {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private Timestamp updatedAt;
+
+    public Board() {}
+    public Board(BoardSaveRequestDto boardSaveRequestDto) {
+        this.id = boardSaveRequestDto.getId();
+        this.title = boardSaveRequestDto.getTitle();
+        this.content = boardSaveRequestDto.getContent();
+        this.imagePath = boardSaveRequestDto.getImagePath();
+        this.viewCount = boardSaveRequestDto.getViewCount();
+        this.type = boardSaveRequestDto.getType();
+     }
 }
