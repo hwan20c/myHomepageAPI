@@ -32,7 +32,6 @@ public class BoardController {
 																					@RequestParam(value = "searchKey", required = false, defaultValue = "")  Optional<String> searchKey,
 																					@RequestParam(value = "searchValue", required = false, defaultValue = "")  Optional<String> searchValue,
 																					@RequestParam(value = "page", required = false, defaultValue = "")  Optional<Integer> page) {
-		System.out.println("@@@@ " + searchKey.getClass().getSimpleName() + "@@@@" + searchValue.getClass().getSimpleName() + "@@@@ " + page.getClass().getSimpleName());
 		BoardSearchRequest boardSearchRequest = new BoardSearchRequest();
 		boardSearchRequest.setPage(page.orElse(0));
 		boardSearchRequest.setSearchKey(searchKey.orElse(""));
