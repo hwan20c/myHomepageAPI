@@ -1,5 +1,7 @@
 package com.tb.api.tbapiserver.board.service;
 
+import java.util.Optional;
+
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,7 +24,7 @@ public class BoardService {
 		this.boardRepository = boardRepository;
 	}
 
-	public Board create(Board board) {
+	public Board save(Board board) {
 		return boardRepository.save(board);
 	}
 
@@ -46,6 +48,14 @@ public class BoardService {
 			.where(BoardSpecification.searchType(boardSearchRequest.getType()))
 			.and(BoardSpecification.searchLike(boardSearchRequest)), pageable);
 		}
+	}
+
+	public Optional<Board> findById(int id) {
+		return boardRepository.findById(id);
+	}
+
+	public void removeBoardById(int id) {
+		boardRepository.removeBoardById(id);
 	}
 
 }

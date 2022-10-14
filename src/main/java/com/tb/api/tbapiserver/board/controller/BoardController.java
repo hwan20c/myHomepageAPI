@@ -7,7 +7,12 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,4 +44,29 @@ public class BoardController {
 		Page<Board> boardList = boardService.listAll(boardSearchRequest);
 		return new ResponseEntity<>(boardList, HttpStatus.OK);
 	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<Board> detail(HttpServletRequest request, @PathVariable int id) {
+		Optional<Board> board = boardService.findById(id);
+		return new ResponseEntity<Board>(board.get(), HttpStatus.OK);
+	}
+
+	@PostMapping
+	public ResponseEntity<Board> create(@RequestBody Board board) {
+		boardService.save(board);
+		return new ResponseEntity<>(board, HttpStatus.OK);
+	}
+
+	@PutMapping
+	public ResponseEntity<Board> update(@RequestBody Board board) {
+		boardService.save(board);
+		return new ResponseEntity<>(board, HttpStatus.OK);
+	}
+
+	@DeleteMapping
+	public ResponseEntity<Board> delete(@RequestBody Board board) {
+		boardService.removeBoardById(board.getId());
+		return new ResponseEntity<>(board, HttpStatus.OK);
+	}
+
 }
