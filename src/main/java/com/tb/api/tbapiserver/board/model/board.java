@@ -1,6 +1,7 @@
 package com.tb.api.tbapiserver.board.model;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +10,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.tb.api.tbapiserver.dto.BoardSaveRequestDto;
 
@@ -41,11 +43,13 @@ public class Board {
 
     @CreationTimestamp
     @Column(name = "created_at")
-    private Timestamp createdAt;
+    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+    private LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Column(name = "updated_at")
-    private Timestamp updatedAt;
+    @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+    private LocalDateTime updatedAt;
 
     public Board() {}
     public Board(BoardSaveRequestDto boardSaveRequestDto) {
