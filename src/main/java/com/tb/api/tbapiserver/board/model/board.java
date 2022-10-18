@@ -1,6 +1,5 @@
 package com.tb.api.tbapiserver.board.model;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
@@ -60,4 +59,8 @@ public class Board {
         this.viewCount = boardSaveRequestDto.getViewCount();
         this.type = boardSaveRequestDto.getType();
      }
+     
+    public void increaseViewCount() {
+        this.viewCount++;
+    }
 }

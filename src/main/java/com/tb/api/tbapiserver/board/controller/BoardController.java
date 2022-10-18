@@ -48,6 +48,8 @@ public class BoardController {
 	@GetMapping("/{id}")
 	public ResponseEntity<Board> detail(HttpServletRequest request, @PathVariable int id) {
 		Optional<Board> board = boardService.findById(id);
+    board.get().increaseViewCount();
+		boardService.save(board.get());
 		return new ResponseEntity<Board>(board.get(), HttpStatus.OK);
 	}
 
