@@ -55,20 +55,19 @@ public class BoardController {
 
 	@PostMapping
 	public ResponseEntity<Board> create(@RequestBody Board requestBoard) {
-		Board board = boardService.findById(requestBoard.getId()).get();
-		board.setId(requestBoard.getId());
-		board.setTitle(requestBoard.getTitle());
-		board.setContent(requestBoard.getContent());
-		board.setImagePath(requestBoard.getImagePath());
-		board.setType(requestBoard.getType());
-		boardService.save(board);
-		return new ResponseEntity<>(board, HttpStatus.OK);
-	}
-
-	@PutMapping
-	public ResponseEntity<Board> update(@RequestBody Board board) {
-		boardService.save(board);
-		return new ResponseEntity<>(board, HttpStatus.OK);
+		if(requestBoard.getId() != 0) {
+			Board board = boardService.findById(requestBoard.getId()).get();
+			board.setId(requestBoard.getId());
+			board.setTitle(requestBoard.getTitle());
+			board.setContent(requestBoard.getContent());
+			board.setImagePath(requestBoard.getImagePath());
+			board.setType(requestBoard.getType());
+			boardService.save(board);
+			return new ResponseEntity<>(board, HttpStatus.OK);
+		} else {
+			boardService.save(requestBoard);
+			return new ResponseEntity<>(requestBoard, HttpStatus.OK);
+		}
 	}
 
 	@DeleteMapping("/{id}")
