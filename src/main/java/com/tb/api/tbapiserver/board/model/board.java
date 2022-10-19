@@ -11,8 +11,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import com.tb.api.tbapiserver.dto.BoardSaveRequestDto;
-
 import lombok.Data;
 
 @Data
@@ -50,16 +48,6 @@ public class Board {
     @DateTimeFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private LocalDateTime updatedAt;
 
-    public Board() {}
-    public Board(BoardSaveRequestDto boardSaveRequestDto) {
-        this.id = boardSaveRequestDto.getId();
-        this.title = boardSaveRequestDto.getTitle();
-        this.content = boardSaveRequestDto.getContent();
-        this.imagePath = boardSaveRequestDto.getImagePath();
-        this.viewCount = boardSaveRequestDto.getViewCount();
-        this.type = boardSaveRequestDto.getType();
-     }
-     
     public void increaseViewCount() {
         this.viewCount++;
     }

@@ -54,7 +54,13 @@ public class BoardController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Board> create(@RequestBody Board board) {
+	public ResponseEntity<Board> create(@RequestBody Board requestBoard) {
+		Board board = boardService.findById(requestBoard.getId()).get();
+		board.setId(requestBoard.getId());
+		board.setTitle(requestBoard.getTitle());
+		board.setContent(requestBoard.getContent());
+		board.setImagePath(requestBoard.getImagePath());
+		board.setType(requestBoard.getType());
 		boardService.save(board);
 		return new ResponseEntity<>(board, HttpStatus.OK);
 	}
@@ -65,10 +71,10 @@ public class BoardController {
 		return new ResponseEntity<>(board, HttpStatus.OK);
 	}
 
-	@DeleteMapping
-	public ResponseEntity<Board> delete(@RequestBody Board board) {
-		boardService.removeBoardById(board.getId());
-		return new ResponseEntity<>(board, HttpStatus.OK);
+	@DeleteMapping("/{id}")
+	public ResponseEntity<String> delete(@PathVariable String id) {
+		boardService.removeBoardById(Integer.parseInt(id));
+		return new ResponseEntity<>("Delete Success", HttpStatus.OK);
 	}
 
 }

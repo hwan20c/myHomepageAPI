@@ -29,6 +29,8 @@ dependencies {
 
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
+
+	implementation group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.11.687'
 }
 
 tasks.named('test') {
