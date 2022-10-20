@@ -31,6 +31,8 @@ dependencies {
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
 
 	implementation group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.11.687'
+
+	implementation 'com.github.ulisesbocchio:jasypt-spring-boot:2.1.0'
 }
 
 tasks.named('test') {
