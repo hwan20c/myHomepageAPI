@@ -9,11 +9,27 @@ spring:
     restart: 
       enabled : true
   datasource:
-    username: root
-    password: 1234
+    username: ENC(058GvSA0fG9dLcgaG0QInw==)
+    password: ENC(T91uIDM5OrUBtEyW2R7VCw==)
     url: jdbc:mysql://localhost:3306/myhomepage?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
     driverClassName: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: none
     show-sql: true
+
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
+
+cloud:
+  aws:
+    object-storage:
+      bucketName: ENC(6v9T4O4PX5Bm+lhf5WawOw==)
+      path:
+        attachment: dev/attachment_files
+        viewImage: dev/view_image_files
+    regionName: ENC(6rN5woJhCJYKkRsNUH7KZ4k6mIHBAMFJ)
+    credentials:
+      accessKey: ENC(BEn+FmAE1SAjtMyV6l+WDJWTSejLL8wVspQuFZBcNQ4=)
+      secretKey: ENC(wSgHh8vR/M3abXbgTAxMKHsP5bv70JToqdEpgeRSOwIk34bHR6I02YyZOH/DHLCXR5XrBT0k/lY=)

@@ -2,8 +2,8 @@ package com.tb.api.tbapiserver.specification;
 
 import org.springframework.data.jpa.domain.Specification;
 
-import com.tb.api.tbapiserver.board.model.Board;
-import com.tb.api.tbapiserver.board.search.BoardSearchRequest;
+import com.tb.api.tbapiserver.model.Board;
+import com.tb.api.tbapiserver.search.BoardSearchRequest;
 
 public class BoardSpecification {
 

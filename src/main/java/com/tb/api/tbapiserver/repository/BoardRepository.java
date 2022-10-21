@@ -1,4 +1,4 @@
-package com.tb.api.tbapiserver.board.repository;
+package com.tb.api.tbapiserver.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +12,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.tb.api.tbapiserver.board.model.Board;
+import com.tb.api.tbapiserver.model.Board;
 
 @Repository
 public interface BoardRepository extends JpaRepository<Board, Integer>, JpaSpecificationExecutor<Board> {

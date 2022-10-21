@@ -1,4 +1,4 @@
-package com.tb.api.tbapiserver.board.controller;
+package com.tb.api.tbapiserver.controller;
 
 import java.util.Optional;
 
@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tb.api.tbapiserver.board.model.Board;
-import com.tb.api.tbapiserver.board.search.BoardSearchRequest;
-import com.tb.api.tbapiserver.board.service.BoardService;
 import com.tb.api.tbapiserver.constants.Constants;
+import com.tb.api.tbapiserver.model.Board;
+import com.tb.api.tbapiserver.search.BoardSearchRequest;
+import com.tb.api.tbapiserver.service.BoardService;
 
 @RestController
 @RequestMapping(Constants.ROOT_PATH+Constants.API+Constants.ROOT_PATH+Constants.BOARDS_PATH)

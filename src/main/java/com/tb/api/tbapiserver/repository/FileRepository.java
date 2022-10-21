@@ -1,4 +1,4 @@
-package com.tb.api.tbapiserver.board.repository;
+package com.tb.api.tbapiserver.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.tb.api.tbapiserver.board.model.File;
+import com.tb.api.tbapiserver.model.File;
 
 @Repository
 public interface FileRepository extends JpaRepository<File, Integer>{

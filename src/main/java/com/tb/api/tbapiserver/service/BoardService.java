@@ -1,4 +1,4 @@
-package com.tb.api.tbapiserver.board.service;
+package com.tb.api.tbapiserver.service;
 
 import java.util.Optional;
 
@@ -10,9 +10,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import com.tb.api.tbapiserver.board.model.Board;
-import com.tb.api.tbapiserver.board.repository.BoardRepository;
-import com.tb.api.tbapiserver.board.search.BoardSearchRequest;
+import com.tb.api.tbapiserver.model.Board;
+import com.tb.api.tbapiserver.repository.BoardRepository;
+import com.tb.api.tbapiserver.search.BoardSearchRequest;
 import com.tb.api.tbapiserver.specification.BoardSpecification;
 
 @Service

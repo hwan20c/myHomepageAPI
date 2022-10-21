@@ -1,4 +1,4 @@
-package com.tb.api.tbapiserver.board.model;
+package com.tb.api.tbapiserver.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

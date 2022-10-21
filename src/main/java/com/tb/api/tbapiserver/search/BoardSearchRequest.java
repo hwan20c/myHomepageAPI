@@ -1,4 +1,4 @@
-package com.tb.api.tbapiserver.board.search;
+package com.tb.api.tbapiserver.search;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

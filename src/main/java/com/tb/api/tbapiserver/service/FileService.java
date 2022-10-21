@@ -1,11 +1,11 @@
-package com.tb.api.tbapiserver.board.service;
+package com.tb.api.tbapiserver.service;
 
 import javax.persistence.NoResultException;
 
 import org.springframework.stereotype.Service;
 
-import com.tb.api.tbapiserver.board.model.File;
-import com.tb.api.tbapiserver.board.repository.FileRepository;
+import com.tb.api.tbapiserver.model.File;
+import com.tb.api.tbapiserver.repository.FileRepository;
 
 @Service
 public class FileService {
