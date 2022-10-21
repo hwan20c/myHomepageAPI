@@ -9,9 +9,9 @@ spring:
     restart: 
       enabled : true
   datasource:
-    username: ENC(058GvSA0fG9dLcgaG0QInw==)
-    password: ENC(T91uIDM5OrUBtEyW2R7VCw==)
-    url: jdbc:mysql://localhost:3306/myhomepage?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    username: ENC(V6atDWafbFXYnKSs3cugWQ==)
+    password: ENC(tS9HZ5yynkm3zkXa69C/eg==)
+    url: ENC(n31JYKWsmNglurbpvPgPqYW5RT1wQ2TlPpiCbNGLv9Fbi9wdmjjXaHOZrgTiQc41tn+1KiUjjBXle+jqhMsm4Atmkp4LJaTkL/jp0nE8cwqOuDJolKYuEe/ATvDa/v2HoJBx11wXmGI=)
     driverClassName: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
@@ -25,11 +25,11 @@ jasypt:
 cloud:
   aws:
     object-storage:
-      bucketName: ENC(6v9T4O4PX5Bm+lhf5WawOw==)
+      bucketName: ENC(OtQpOcNPikoZiurBVHrQsA==)
       path:
         attachment: dev/attachment_files
         viewImage: dev/view_image_files
-    regionName: ENC(6rN5woJhCJYKkRsNUH7KZ4k6mIHBAMFJ)
+    regionName: ENC(1mpofuyo2JSb3cxQ5LXGz2Km0g1DhsiB)
     credentials:
-      accessKey: ENC(BEn+FmAE1SAjtMyV6l+WDJWTSejLL8wVspQuFZBcNQ4=)
-      secretKey: ENC(wSgHh8vR/M3abXbgTAxMKHsP5bv70JToqdEpgeRSOwIk34bHR6I02YyZOH/DHLCXR5XrBT0k/lY=)
+      accessKey: ENC(Dha84k7jTOoJFh17fJWm58w3/XNlsRO6mgWznTXuDgU=)
+      secretKey: ENC(R4Qc+4PCIVjC1TmZH7lOSEt9dqmC+0CuEhMe1G11tQfKKCU8rvUmfzD+C2pSCR/1TVHIJZaD9NQ=)

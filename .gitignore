@@ -41,3 +41,6 @@ out/
 ._.DS_Store
 **/.DS_Store
 **/._.DS_Store
+
+### Jasypt Password Key igonre ###
+/src/main/resources/jasypt_password.txt
