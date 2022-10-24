@@ -7,12 +7,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.tb.api.tbapiserver.model.File;
+import com.tb.api.tbapiserver.model.ContentsFile;
 
 @Repository
-public interface FileRepository extends JpaRepository<File, Integer>{
+public interface ContentsFileRepository extends JpaRepository<ContentsFile, Integer>{
   @Transactional
   @Modifying
-  @Query("DELETE FROM File f WHERE f.boardId = :boardId")
+  @Query("DELETE FROM ContentsFile f WHERE f.boardId = :boardId")
   int removeByBoardId(@Param("boardId") int boardId);
 }

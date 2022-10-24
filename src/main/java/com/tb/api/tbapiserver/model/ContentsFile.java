@@ -11,21 +11,17 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "files")
-public class File {
+@Table(name = "contents_files")
+public class ContentsFile {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
-
   @Column
   private String name;
-
   @Column(name = "bucket_name")
   private String bucketName;
-
   @Column
   private String path;
-
   @Column(name = "board_id")
   private int boardId;
 }

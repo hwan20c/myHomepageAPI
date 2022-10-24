@@ -1,0 +1,1 @@
+ALTER TABLE contetns_files RENAME contents_files;

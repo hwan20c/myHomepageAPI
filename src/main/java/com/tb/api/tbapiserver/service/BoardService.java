@@ -1,5 +1,7 @@
 package com.tb.api.tbapiserver.service;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.context.annotation.ComponentScan;
@@ -9,8 +11,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.tb.api.tbapiserver.model.Board;
+import com.tb.api.tbapiserver.model.ContentsFile;
 import com.tb.api.tbapiserver.repository.BoardRepository;
 import com.tb.api.tbapiserver.search.BoardSearchRequest;
 import com.tb.api.tbapiserver.specification.BoardSpecification;
@@ -19,9 +23,13 @@ import com.tb.api.tbapiserver.specification.BoardSpecification;
 @ComponentScan(value = "BoardSpecification")
 public class BoardService {
 	private final BoardRepository boardRepository;
+	private final ObjectStorageService objectStorageService;
+	private final ContentsFileService contentsFileService;
 
-	public BoardService(BoardRepository boardRepository) {
+	public BoardService(BoardRepository boardRepository, ObjectStorageService objectStorageService, ContentsFileService contentsFileService) {
 		this.boardRepository = boardRepository;
+		this.objectStorageService = objectStorageService;
+		this.contentsFileService = contentsFileService;
 	}
 
 	public Board save(Board board) {
@@ -56,6 +64,40 @@ public class BoardService {
 
 	public void removeBoardById(int id) {
 		boardRepository.removeBoardById(id);
+	}
+
+	public Board boardImages(Board board, MultipartFile mainImageFile) {
+		if(!mainImageFile.isEmpty()) {
+			board = save(board);
+			board.setImagePath(objectStorageService.getBucketName() + "/" + objectStorageService.getViewImagePath()
+													+ "/" + board.getId() + "/" + mainImageFile.getOriginalFilename());
+			objectStorageService.uploadFile(objectStorageService.getViewImagePath() + "/" + board.getId()
+																			 + "/" + mainImageFile.getOriginalFilename(), mainImageFile);
+		}
+		return board;
+	}
+
+	public void setMultiFiles(Board board, List<MultipartFile> multipartFiles) {
+		boolean isDeleted = false;
+		for (MultipartFile multipartFile : multipartFiles) {
+			if(!multipartFile.isEmpty()) {
+				if(!isDeleted) {
+					int removeFilesCount = contentsFileService.removeByBoardId(board.getId());
+					if(removeFilesCount != 0) {
+						objectStorageService.removeAttachmentFiles(board.getId());
+					}
+					isDeleted = true;
+				}
+				ContentsFile contentsFile = new ContentsFile();
+				contentsFile.setBoardId(board.getId());
+				contentsFile.setName(multipartFile.getOriginalFilename());
+				contentsFile.setBucketName(objectStorageService.getBucketName());
+				contentsFile.setPath(objectStorageService.getAttachmentPath() + "/" + board.getId() + "/" + multipartFile.getOriginalFilename());
+				board.setContentsFiles(Collections.singletonList(contentsFile));
+				contentsFileService.create(contentsFile);
+				objectStorageService.uploadFile(contentsFile.getPath(), multipartFile);
+			}
+		}
 	}
 
 }
