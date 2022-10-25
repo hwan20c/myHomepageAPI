@@ -69,8 +69,9 @@ public class BoardService {
 	public Board boardImages(Board board, MultipartFile mainImageFile) {
 		if(!mainImageFile.isEmpty()) {
 			board = save(board);
-			board.setImagePath(objectStorageService.getBucketName() + "/" + objectStorageService.getViewImagePath()
-													+ "/" + board.getId() + "/" + mainImageFile.getOriginalFilename());
+			board.setImagePath(objectStorageService.getEndpoint() + "/" + 
+													objectStorageService.getViewImagePath()+ "/" + 
+													board.getId() + "/" + mainImageFile.getOriginalFilename());
 			objectStorageService.uploadFile(objectStorageService.getViewImagePath() + "/" + board.getId()
 																			 + "/" + mainImageFile.getOriginalFilename(), mainImageFile);
 		}

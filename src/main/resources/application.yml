@@ -1,5 +1,6 @@
 server:
   port: 8090
+  
 spring:
   main:
     allow-bean-definition-overriding: true
@@ -17,6 +18,10 @@ spring:
     hibernate:
       ddl-auto: none
     show-sql: true
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
 
 jasypt:
   encryptor:
@@ -25,6 +30,7 @@ jasypt:
 cloud:
   aws:
     object-storage:
+      endPoint: ENC(44TdIqA9TwBnbCEXOqNWY0lP+2HXczAT3VZ7QyWzP40bGHKfPvb7tOiSr1k5DHRhgWSIrRBqWOE=)
       bucketName: ENC(OtQpOcNPikoZiurBVHrQsA==)
       path:
         attachment: dev/attachment_files

@@ -16,15 +16,17 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.DeleteObjectsRequest;
+import com.amazonaws.services.s3.model.DeleteObjectsRequest.KeyVersion;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
-import com.amazonaws.services.s3.model.DeleteObjectsRequest.KeyVersion;
 
 @Service
 public class ObjectStorageService {
   private AmazonS3 objectStorage;
 
+  @Value("${cloud.aws.object-storage.endPoint}")
+  private String endPoint;
   @Value("${cloud.aws.object-storage.bucketName}")
   private String bucketName;
   @Value("${cloud.aws.regionName}")
@@ -41,6 +43,7 @@ public class ObjectStorageService {
   @PostConstruct
   private void initObjectStorageAws() {
     objectStorage = AmazonS3ClientBuilder.standard()
+                  // .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration("hwanobjectstorageaccess", regionName.getName()))
                   .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
                   .withRegion(regionName)
                   .build();
@@ -104,6 +107,10 @@ public class ObjectStorageService {
       DeleteObjectsRequest multipleObjectDeleteRequest = new DeleteObjectsRequest(bucketName).withKeys(keyVersions).withQuiet(false);
       objectStorage.deleteObjects(multipleObjectDeleteRequest);
     }
+  }
+
+  public String getEndpoint() {
+    return endPoint;
   }
 
   public String getBucketName() {

@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -56,72 +55,53 @@ public class BoardController {
 		return new ResponseEntity<Board>(board.get(), HttpStatus.OK);
 	}
 
-	// @PostMapping
-	// public ResponseEntity<Board> create(@RequestBody Board requestBoard) {
-	// 	if(requestBoard.getId() != 0) {
-	// 		Board board = boardService.findById(requestBoard.getId()).get();
-	// 		board.setId(requestBoard.getId());
-	// 		board.setTitle(requestBoard.getTitle());
-	// 		board.setContent(requestBoard.getContent());
-	// 		board.setImagePath(requestBoard.getImagePath());
-	// 		board.setType(requestBoard.getType());
-	// 		boardService.save(board);
-	// 		return new ResponseEntity<>(board, HttpStatus.OK);
-	// 	} else {
-	// 		boardService.save(requestBoard);
-	// 		return new ResponseEntity<>(requestBoard, HttpStatus.OK);
-	// 	}
-	// }
-
 	@PostMapping
 	public ResponseEntity<Board> create(@RequestParam ("board") String requestBoard, 
 																			@RequestParam (required = false, name = "attachedFiles") List<MultipartFile> attachedFiles, 
 																			@RequestPart(required = false, name="mainImageFile") MultipartFile mainImageFile) throws Exception{
-		System.out.println("@@@@@@@@@@@ " + requestBoard);
-
+		System.out.println("@@@@@@@@@@@ 1" + requestBoard);
 		ObjectMapper objectMapper = new ObjectMapper();
-		Board board = objectMapper.readValue(requestBoard, Board.class);
+		Board refinedBoard = objectMapper.readValue(requestBoard, Board.class);
+		System.out.println("@@@@@@@@@@@@ 2 : " + refinedBoard.toString());
 
-		System.out.println("@@@@@@@@@@@@ 2 : " + board.toString());
-
-		if(board.getId() != 0) {
-			board = boardService.findById(board.getId()).get();
-			board.setId(board.getId());
-			board.setTitle(board.getTitle());
-			board.setContent(board.getContent());
-			board.setImagePath(board.getImagePath());
-			board.setType(board.getType());
+		//update
+		if(refinedBoard.getId() != 0) {
+			Board board = boardService.findById(refinedBoard.getId()).get();
+			board.setId(refinedBoard.getId());
+			board.setTitle(refinedBoard.getTitle());
+			board.setContent(refinedBoard.getContent());
+			
+			if(refinedBoard.getImagePath() != null) board.setImagePath(refinedBoard.getImagePath());
+			board.setType(refinedBoard.getType());
 
 			if(mainImageFile != null) {
 				board = boardService.boardImages(board, mainImageFile);
-				Board originBoard = boardService.findById(board.getId()).get();
-				if(originBoard != null && originBoard.getImagePath() != null && mainImageFile.isEmpty()) {
-					board.setImagePath(originBoard.getImagePath());
+				if(refinedBoard != null && refinedBoard.getImagePath() != null && mainImageFile.isEmpty()) {
+					board.setImagePath(refinedBoard.getImagePath());
 				}
 			}
-
+			System.out.println("@@@@@@@@@@@@ 3 : " + board.toString());
 			boardService.save(board);
 
-			if(!attachedFiles.get(0).isEmpty()) {
+			if(attachedFiles != null) {
 				boardService.setMultiFiles(board, attachedFiles);
 			}
-
 			return new ResponseEntity<>(board, HttpStatus.OK);
+			//create
 		} else {
-
 			if(mainImageFile != null) {
-				board = boardService.boardImages(board, mainImageFile);
+				Board board = boardService.boardImages(refinedBoard, mainImageFile);
 				Board originBoard = boardService.findById(board.getId()).get();
 				if(originBoard != null && originBoard.getImagePath() != null && mainImageFile.isEmpty()) {
 					board.setImagePath(originBoard.getImagePath());
 				}
 			}
 
-			boardService.save(board);
-			if(!attachedFiles.get(0).isEmpty()) {
-				boardService.setMultiFiles(board, attachedFiles);
+			boardService.save(refinedBoard);
+			if(attachedFiles != null) {
+				boardService.setMultiFiles(refinedBoard, attachedFiles);
 			}
-			return new ResponseEntity<>(board, HttpStatus.OK);
+			return new ResponseEntity<>(refinedBoard, HttpStatus.OK);
 		}
 	}
 
