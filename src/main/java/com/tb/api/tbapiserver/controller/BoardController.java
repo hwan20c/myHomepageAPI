@@ -23,15 +23,21 @@ import com.tb.api.tbapiserver.constants.Constants;
 import com.tb.api.tbapiserver.model.Board;
 import com.tb.api.tbapiserver.search.BoardSearchRequest;
 import com.tb.api.tbapiserver.service.BoardService;
+import com.tb.api.tbapiserver.service.ContentsFileService;
+import com.tb.api.tbapiserver.service.ObjectStorageService;
 
 @RestController
 @RequestMapping(Constants.ROOT_PATH+Constants.API+Constants.ROOT_PATH+Constants.BOARDS_PATH)
 public class BoardController {
 
 	private final BoardService boardService;
+	private final ObjectStorageService objectStorageService;
+	private final ContentsFileService contentsFileService;
 
-	public BoardController(BoardService boardService) {
+	public BoardController(BoardService boardService, ObjectStorageService objectStorageService, ContentsFileService contentsFileService) {
 		this.boardService = boardService;
+		this.objectStorageService = objectStorageService;
+		this.contentsFileService = contentsFileService;
 	}
 	
 	@GetMapping
@@ -70,11 +76,11 @@ public class BoardController {
 			board.setId(refinedBoard.getId());
 			board.setTitle(refinedBoard.getTitle());
 			board.setContent(refinedBoard.getContent());
-			
 			if(refinedBoard.getImagePath() != null) board.setImagePath(refinedBoard.getImagePath());
 			board.setType(refinedBoard.getType());
 
 			if(mainImageFile != null) {
+				objectStorageService.removeViewImageFile(board.getId());
 				board = boardService.boardImages(board, mainImageFile);
 				if(refinedBoard != null && refinedBoard.getImagePath() != null && mainImageFile.isEmpty()) {
 					board.setImagePath(refinedBoard.getImagePath());
@@ -89,25 +95,28 @@ public class BoardController {
 			return new ResponseEntity<>(board, HttpStatus.OK);
 			//create
 		} else {
+			Board board = new Board();
+			board.setTitle(refinedBoard.getTitle());
+			board.setContent(refinedBoard.getContent());
+			board.setType(refinedBoard.getType());
 			if(mainImageFile != null) {
-				Board board = boardService.boardImages(refinedBoard, mainImageFile);
-				Board originBoard = boardService.findById(board.getId()).get();
-				if(originBoard != null && originBoard.getImagePath() != null && mainImageFile.isEmpty()) {
-					board.setImagePath(originBoard.getImagePath());
-				}
+				board = boardService.boardImages(board, mainImageFile);
 			}
-
-			boardService.save(refinedBoard);
+			System.out.println("@@@@@@@@@@@@ 4 : " + board.toString());
+			boardService.save(board);
 			if(attachedFiles != null) {
-				boardService.setMultiFiles(refinedBoard, attachedFiles);
+				boardService.setMultiFiles(board, attachedFiles);
 			}
-			return new ResponseEntity<>(refinedBoard, HttpStatus.OK);
+			return new ResponseEntity<>(board, HttpStatus.OK);
 		}
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<String> delete(@PathVariable String id) {
-		boardService.removeBoardById(Integer.parseInt(id));
+	public ResponseEntity<String> delete(@PathVariable int id) {
+		int removeFilesCount = contentsFileService.removeByBoardId(id);
+		if(removeFilesCount != 0)
+			objectStorageService.removeDirectoryFiles(id);
+		boardService.removeBoardById(id);
 		return new ResponseEntity<>("Delete Success", HttpStatus.OK);
 	}
 
