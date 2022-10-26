@@ -62,11 +62,11 @@ public class ContentsFileController {
   }
 
   @PostMapping
-  public ContentsFile upload(@RequestParam("file") MultipartFile multipartFile) {
+  public ResponseEntity<ContentsFile> upload(@RequestParam("file") MultipartFile multipartFile) {
     String url = "content-files/" + multipartFile.getOriginalFilename();
     objectStorageService.uploadFile(url, multipartFile);
     ContentsFile contentsFile = new ContentsFile();
-    contentsFile.setPath(objectStorageService.getBucketName() + "/" + url);
-    return contentsFile;
+    contentsFile.setPath(objectStorageService.getEndpoint() + "/" + url);
+    return ResponseEntity.ok().body(contentsFile);
   }
 }
