@@ -39,6 +39,8 @@ public class ObjectStorageService {
   private String attachmentPath;
   @Value("${cloud.aws.object-storage.path.viewImage}")
   private String viewImagePath;
+  @Value("${cloud.aws.object-storage.path.boardInsertedImage}")
+  private String boardInsertedImage;
 
   @PostConstruct
   private void initObjectStorageAws() {
@@ -99,7 +101,21 @@ public class ObjectStorageService {
 
   public void removeAttachmentFiles(int id) {
     List<KeyVersion> keyVersions = new ArrayList<>();
+    System.out.println("@@@@@@@@@@@@@@@@@ " + getAttachmentPath() + "/" + id);
     List<S3ObjectSummary> s3ObjectSummaries = objectStorage.listObjects(bucketName, getAttachmentPath() + "/" + id).getObjectSummaries();
+    if(!s3ObjectSummaries.isEmpty()) {
+      for(S3ObjectSummary file : s3ObjectSummaries) {
+        keyVersions.add(new KeyVersion(file.getKey()));
+      }
+      DeleteObjectsRequest multipleObjectDeleteRequest = new DeleteObjectsRequest(bucketName).withKeys(keyVersions).withQuiet(false);
+      objectStorage.deleteObjects(multipleObjectDeleteRequest);
+    }
+  }
+
+  public void removeBoardInsertedFile(String fileURL) {
+    List<KeyVersion> keyVersions = new ArrayList<>();
+    System.out.println("@@@@@@@@@@@@@@ : " + fileURL);
+    List<S3ObjectSummary> s3ObjectSummaries = objectStorage.listObjects(bucketName, fileURL).getObjectSummaries();
     if(!s3ObjectSummaries.isEmpty()) {
       for(S3ObjectSummary file : s3ObjectSummaries) {
         keyVersions.add(new KeyVersion(file.getKey()));
@@ -123,6 +139,10 @@ public class ObjectStorageService {
 
   public String getViewImagePath() {
     return viewImagePath;
+  }
+
+  public String getBoardInsertedImagePath() {
+    return boardInsertedImage;
   }
  
 }

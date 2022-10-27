@@ -35,6 +35,7 @@ cloud:
       path:
         attachment: dev/attachment_files
         viewImage: dev/view_image_files
+        boardInsertedImage : dev/content-files
     regionName: ENC(1mpofuyo2JSb3cxQ5LXGz2Km0g1DhsiB)
     credentials:
       accessKey: ENC(Dha84k7jTOoJFh17fJWm58w3/XNlsRO6mgWznTXuDgU=)
