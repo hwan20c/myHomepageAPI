@@ -115,7 +115,8 @@ public class ObjectStorageService {
   public void removeBoardInsertedFile(String fileURL) {
     List<KeyVersion> keyVersions = new ArrayList<>();
     System.out.println("@@@@@@@@@@@@@@ : " + fileURL);
-    List<S3ObjectSummary> s3ObjectSummaries = objectStorage.listObjects(bucketName, fileURL).getObjectSummaries();
+    System.out.println("@@@@@@@@@@@@@@ : " + fileURL.substring(48));
+    List<S3ObjectSummary> s3ObjectSummaries = objectStorage.listObjects(bucketName, fileURL.substring(48)).getObjectSummaries();
     if(!s3ObjectSummaries.isEmpty()) {
       for(S3ObjectSummary file : s3ObjectSummaries) {
         keyVersions.add(new KeyVersion(file.getKey()));
