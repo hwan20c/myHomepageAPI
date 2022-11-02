@@ -1,5 +1,6 @@
 package com.tb.api.tbapiserver.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tb.api.tbapiserver.constants.Constants;
 import com.tb.api.tbapiserver.model.Board;
+import com.tb.api.tbapiserver.model.ContentsFile;
 import com.tb.api.tbapiserver.search.BoardSearchRequest;
 import com.tb.api.tbapiserver.service.BoardService;
 import com.tb.api.tbapiserver.service.ContentsFileService;
@@ -64,8 +66,19 @@ public class BoardController {
 	@PostMapping
 	public ResponseEntity<Board> create(@RequestParam ("board") String requestBoard, 
 																			@RequestParam (required = false, name = "attachedFiles") List<MultipartFile> attachedFiles, 
-																			@RequestPart(required = false, name="mainImageFile") MultipartFile mainImageFile) throws Exception{
+																			@RequestPart(required = false, name="mainImageFile") MultipartFile mainImageFile,
+																			@RequestParam (required = false, name = "contentFileNames", defaultValue = "") Optional<String> contentFileNames) throws Exception{
 		System.out.println("@@@@@@@@@@@ 1" + requestBoard);
+		// List<String> refinedContentFileName = new ArrayList<>();
+		if(!contentFileNames.get().equals("")) {
+			System.out.println("@@@@@@@@ 123123 : " + contentFileNames.get());
+			String replaceStr = contentFileNames.get().replaceAll("^\\[|]$", "");
+			replaceStr = replaceStr.replaceAll("\"", "");
+			System.out.println("@@@@@@@@@@ : " + replaceStr);
+			
+		}
+		
+
 		ObjectMapper objectMapper = new ObjectMapper();
 		Board refinedBoard = objectMapper.readValue(requestBoard, Board.class);
 		System.out.println("@@@@@@@@@@@@ 2 : " + refinedBoard.toString());
@@ -92,6 +105,12 @@ public class BoardController {
 			if(attachedFiles != null) {
 				boardService.setMultiFiles(board, attachedFiles);
 			}
+			// if(!contentFileNames.isEmpty()) {
+			// 	ContentsFile contentsFile = new ContentsFile();
+			// 	contentsFile.setName(contentFileNames.toString());
+
+			// 	contentsFileService.create(contentsFile);
+			// }
 			return new ResponseEntity<>(board, HttpStatus.OK);
 			//create
 		} else {

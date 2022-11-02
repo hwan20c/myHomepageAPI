@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,16 +25,19 @@ import com.tb.api.tbapiserver.constants.Constants;
 import com.tb.api.tbapiserver.model.ContentsFile;
 import com.tb.api.tbapiserver.service.ContentsFileService;
 import com.tb.api.tbapiserver.service.ObjectStorageService;
+import com.tb.api.tbapiserver.service.RandomStringService;
 
 @Controller
 @RequestMapping(Constants.ROOT_PATH+Constants.API+Constants.ROOT_PATH+Constants.CONTENTSFILES_PATH)
 public class ContentsFileController {
   private final ContentsFileService contentsFileService;
   private final ObjectStorageService objectStorageService;
+  private final RandomStringService randomStringService;
   
-  public ContentsFileController(ContentsFileService contentsFileService, ObjectStorageService objectStorageService) {
+  public ContentsFileController(ContentsFileService contentsFileService, ObjectStorageService objectStorageService, RandomStringService randomStringService) {
     this.contentsFileService = contentsFileService;
     this.objectStorageService = objectStorageService;
+    this.randomStringService = randomStringService;
   }
 
   @GetMapping("/{id}")
@@ -65,7 +67,9 @@ public class ContentsFileController {
 
   @PostMapping
   public ResponseEntity<ContentsFile> upload(@RequestParam("file") MultipartFile multipartFile) {
-    String url = "dev/content-files/" + multipartFile.getOriginalFilename();
+    String randomString = randomStringService.createRandomString();
+    String url = "dev/content-files/" + randomString + "_" + multipartFile.getOriginalFilename();
+    System.out.println("@@@ 345 " + url);
     objectStorageService.uploadFile(url, multipartFile);
     ContentsFile contentsFile = new ContentsFile();
     contentsFile.setPath(objectStorageService.getEndpoint() + "/" + url);
