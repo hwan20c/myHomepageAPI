@@ -1,6 +1,7 @@
 package com.tb.api.tbapiserver.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,16 +69,18 @@ public class BoardController {
 																			@RequestParam (required = false, name = "attachedFiles") List<MultipartFile> attachedFiles, 
 																			@RequestPart(required = false, name="mainImageFile") MultipartFile mainImageFile,
 																			@RequestParam (required = false, name = "contentFileNames", defaultValue = "") Optional<String> contentFileNames) throws Exception{
+
 		System.out.println("@@@@@@@@@@@ 1" + requestBoard);
-		// List<String> refinedContentFileName = new ArrayList<>();
+		List<String> refinedContentFileName = new ArrayList<>();
+
 		if(!contentFileNames.get().equals("")) {
 			System.out.println("@@@@@@@@ 123123 : " + contentFileNames.get());
 			String replaceStr = contentFileNames.get().replaceAll("^\\[|]$", "");
 			replaceStr = replaceStr.replaceAll("\"", "");
+			refinedContentFileName = new ArrayList<String>(Arrays.asList(replaceStr.split(",")));
 			System.out.println("@@@@@@@@@@ : " + replaceStr);
-			
-		}
-		
+			System.out.println("@@@@@@@@@@@ : " + refinedContentFileName);
+		} 		
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		Board refinedBoard = objectMapper.readValue(requestBoard, Board.class);
@@ -105,12 +108,19 @@ public class BoardController {
 			if(attachedFiles != null) {
 				boardService.setMultiFiles(board, attachedFiles);
 			}
-			// if(!contentFileNames.isEmpty()) {
-			// 	ContentsFile contentsFile = new ContentsFile();
-			// 	contentsFile.setName(contentFileNames.toString());
 
-			// 	contentsFileService.create(contentsFile);
-			// }
+			if(!refinedContentFileName.isEmpty()) {
+				for(int i=0; i<refinedContentFileName.size(); i++) {
+					ContentsFile contentsFile = new ContentsFile();
+					int searchFinalBackslach = refinedContentFileName.get(i).lastIndexOf("/");
+					contentsFile.setName(refinedContentFileName.get(i).substring(searchFinalBackslach + 1));
+					contentsFile.setBucketName(objectStorageService.getBucketName());
+					contentsFile.setPath(refinedContentFileName.get(i).substring(48));
+					contentsFile.setBoardId(board.getId());
+					contentsFileService.create(contentsFile);
+				}
+			}
+
 			return new ResponseEntity<>(board, HttpStatus.OK);
 			//create
 		} else {
@@ -126,6 +136,17 @@ public class BoardController {
 			if(attachedFiles != null) {
 				boardService.setMultiFiles(board, attachedFiles);
 			}
+			if(!refinedContentFileName.isEmpty()) {
+				for(int i=0; i<refinedContentFileName.size(); i++) {
+					ContentsFile contentsFile = new ContentsFile();
+					int searchFinalBackslach = refinedContentFileName.get(i).lastIndexOf("/");
+					contentsFile.setName(refinedContentFileName.get(i).substring(searchFinalBackslach + 1));
+					contentsFile.setBucketName(objectStorageService.getBucketName());
+					contentsFile.setPath(refinedContentFileName.get(i).substring(48));
+					contentsFile.setBoardId(board.getId());
+					contentsFileService.create(contentsFile);
+				}
+			}
 			return new ResponseEntity<>(board, HttpStatus.OK);
 		}
 	}
@@ -133,8 +154,9 @@ public class BoardController {
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> delete(@PathVariable int id) {
 		int removeFilesCount = contentsFileService.removeByBoardId(id);
-		if(removeFilesCount != 0)
+		if(removeFilesCount != 0) {
 			objectStorageService.removeDirectoryFiles(id);
+		}
 		boardService.removeBoardById(id);
 		return new ResponseEntity<>("Delete Success", HttpStatus.OK);
 	}
