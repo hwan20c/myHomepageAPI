@@ -45,7 +45,6 @@ public class ObjectStorageService {
   @PostConstruct
   private void initObjectStorageAws() {
     objectStorage = AmazonS3ClientBuilder.standard()
-                  // .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration("hwanobjectstorageaccess", regionName.getName()))
                   .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
                   .withRegion(regionName)
                   .build();
@@ -101,7 +100,6 @@ public class ObjectStorageService {
 
   public void removeAttachmentFiles(int id) {
     List<KeyVersion> keyVersions = new ArrayList<>();
-    System.out.println("@@@@@@@@@@@@@@@@@ " + getAttachmentPath() + "/" + id);
     List<S3ObjectSummary> s3ObjectSummaries = objectStorage.listObjects(bucketName, getAttachmentPath() + "/" + id).getObjectSummaries();
     if(!s3ObjectSummaries.isEmpty()) {
       for(S3ObjectSummary file : s3ObjectSummaries) {
@@ -114,8 +112,6 @@ public class ObjectStorageService {
 
   public void removeBoardInsertedFile(String fileURL) {
     List<KeyVersion> keyVersions = new ArrayList<>();
-    System.out.println("@@@@@@@@@@@@@@ : " + fileURL);
-    System.out.println("@@@@@@@@@@@@@@ : " + fileURL.substring(48));
     List<S3ObjectSummary> s3ObjectSummaries = objectStorage.listObjects(bucketName, fileURL.substring(48)).getObjectSummaries();
     if(!s3ObjectSummaries.isEmpty()) {
       for(S3ObjectSummary file : s3ObjectSummaries) {

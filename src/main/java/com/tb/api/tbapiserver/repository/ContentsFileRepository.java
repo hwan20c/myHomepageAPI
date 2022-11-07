@@ -15,4 +15,5 @@ public interface ContentsFileRepository extends JpaRepository<ContentsFile, Inte
   @Modifying
   @Query("DELETE FROM ContentsFile f WHERE f.boardId = :boardId")
   int removeByBoardId(@Param("boardId") int boardId);
+  int countByPathAndBoardId(String path, int boardId);
 }

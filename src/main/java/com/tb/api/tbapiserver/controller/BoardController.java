@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -70,21 +71,15 @@ public class BoardController {
 																			@RequestPart(required = false, name="mainImageFile") MultipartFile mainImageFile,
 																			@RequestParam (required = false, name = "contentFileNames", defaultValue = "") Optional<String> contentFileNames) throws Exception{
 
-		System.out.println("@@@@@@@@@@@ 1" + requestBoard);
 		List<String> refinedContentFileName = new ArrayList<>();
-
 		if(!contentFileNames.get().equals("")) {
-			System.out.println("@@@@@@@@ 123123 : " + contentFileNames.get());
 			String replaceStr = contentFileNames.get().replaceAll("^\\[|]$", "");
 			replaceStr = replaceStr.replaceAll("\"", "");
 			refinedContentFileName = new ArrayList<String>(Arrays.asList(replaceStr.split(",")));
-			System.out.println("@@@@@@@@@@ : " + replaceStr);
-			System.out.println("@@@@@@@@@@@ : " + refinedContentFileName);
 		} 		
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		Board refinedBoard = objectMapper.readValue(requestBoard, Board.class);
-		System.out.println("@@@@@@@@@@@@ 2 : " + refinedBoard.toString());
 
 		//update
 		if(refinedBoard.getId() != 0) {
@@ -102,7 +97,6 @@ public class BoardController {
 					board.setImagePath(refinedBoard.getImagePath());
 				}
 			}
-			System.out.println("@@@@@@@@@@@@ 3 : " + board.toString());
 			boardService.save(board);
 
 			if(attachedFiles != null) {
@@ -117,7 +111,9 @@ public class BoardController {
 					contentsFile.setBucketName(objectStorageService.getBucketName());
 					contentsFile.setPath(refinedContentFileName.get(i).substring(48));
 					contentsFile.setBoardId(board.getId());
-					contentsFileService.create(contentsFile);
+					if(contentsFileService.countByPathAndBoardId(contentsFile.getPath(), contentsFile.getBoardId()) < 1) {
+						contentsFileService.create(contentsFile);
+					}
 				}
 			}
 
@@ -131,7 +127,6 @@ public class BoardController {
 			if(mainImageFile != null) {
 				board = boardService.boardImages(board, mainImageFile);
 			}
-			System.out.println("@@@@@@@@@@@@ 4 : " + board.toString());
 			boardService.save(board);
 			if(attachedFiles != null) {
 				boardService.setMultiFiles(board, attachedFiles);
@@ -152,10 +147,13 @@ public class BoardController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<String> delete(@PathVariable int id) {
+	public ResponseEntity<String> delete(@PathVariable int id, @RequestBody List<String> fileUrls) {
 		int removeFilesCount = contentsFileService.removeByBoardId(id);
 		if(removeFilesCount != 0) {
 			objectStorageService.removeDirectoryFiles(id);
+			for(int i=0; i < fileUrls.size(); i++) {
+				objectStorageService.removeBoardInsertedFile(fileUrls.get(i));
+			}
 		}
 		boardService.removeBoardById(id);
 		return new ResponseEntity<>("Delete Success", HttpStatus.OK);

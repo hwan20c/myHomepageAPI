@@ -26,5 +26,9 @@ public class ContentsFileService {
   public ContentsFile findById(int id) {
     return fileRepository.findById(id).orElseThrow(NoResultException::new);
   }
+
+  public int countByPathAndBoardId(String path, int boardId) {
+    return fileRepository.countByPathAndBoardId(path, boardId);
+  }
   
 }
