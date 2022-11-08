@@ -19,7 +19,8 @@ public class JasyptConfig {
   public StringEncryptor stringEncryptor() {
     PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
     SimpleStringPBEConfig config = new SimpleStringPBEConfig();
-    config.setPassword(getJasyptPassword());
+    config.setPassword("HWAN@1218");
+    // config.setPassword(getJasyptPassword());
     config.setAlgorithm("PBEWithMD5AndDES");
     config.setKeyObtentionIterations("1000");
     config.setPoolSize("1");
