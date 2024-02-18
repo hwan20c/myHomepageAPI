@@ -1,6 +1,6 @@
-FROM openjdk:17-jre-slim
-
+# Run Stage
+FROM openjdk:17-jdk-slim
 WORKDIR /app
-COPY build/libs/your-app.jar .
-
-CMD ["java", "-jar", "your-app.jar"]
+COPY --from=builder /app/app.jar .
+EXPOSE 8090
+CMD ["java", "-jar", "app.jar"]
